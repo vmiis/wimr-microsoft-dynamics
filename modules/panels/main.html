@@ -1,9 +1,19 @@
 <div id=D__ID>
     <div id=panel__ID>
-        <ul>
-            <li><a href="?/research-studies">Research Studies</a></li>
-            <li><a href="?/contacts">Contacts</a></li>
-        </ul>
+        <div>
+            <b>Search</b>
+            <ul>
+                <li><a href="?/research-studies">Research Studies</a></li>
+                <li><a href="?/contacts">Contacts</a></li>
+            </ul>
+        </div>
+        <div>
+            <b>Count</b>
+            <ul>
+                <li><a href="?/how-many-contacts">How many contacts</a></li>
+                <li><a href="?/how-many-studes">How many studies?</a></li>
+            </ul>
+        </div>
     </div>
     <script>
         function F__ID(){
@@ -14,6 +24,9 @@
                 e.preventDefault();
                 e.stopPropagation();
                 var module_name=$(this).attr('href').replace('?\/','');
+                switch(module_name){
+                    case "how-many-contacts": break;
+                }
                 if(module_name!="") $vm.show_module(module_name,{})
             })
             //---------------------------------------------------------------
@@ -26,6 +39,11 @@
         }
         #panel__ID{
             padding:50px 100px;
+
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+            grid-gap: 10px;
+
         }
 
         #panel__ID li a{

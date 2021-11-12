@@ -28,11 +28,11 @@
                     if(res.status=='ok'){
                         switch(cmd){
                             case "exchange-microsoft-token": 
-                                
+                                /*
                                 var expires_in=res.result.a.expires_in;
                                 sessionStorage.setItem(api_name+" oauth expire",new Date(new Date().getTime()+expires_in*1000).toLocaleString());
                                 sessionStorage.setItem(api_name+" oauth",JSON.stringify(res.result));
-
+                                */
                                 process_identity(res,id); 
                                 callback(id); 
                             break;
@@ -71,6 +71,10 @@
                                 var expires_in=res.result.a.expires_in;
                                 sessionStorage.setItem(session_key+" oauth expire",new Date(new Date().getTime()+expires_in*1000).toLocaleString());
                                 sessionStorage.setItem(session_key+" oauth",JSON.stringify(res.result));
+
+                                sessionStorage.setItem(session_key+" username",res.result.user_name);
+                                sessionStorage.setItem(session_key+" displayname",res.result.displayname);
+
                                 callback(id);
                                 break;
                             case "exchange-docusign-token":
