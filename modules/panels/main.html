@@ -10,8 +10,9 @@
         <div>
             <b>Count</b>
             <ul>
-                <li><a href="?/how-many-contacts">How many contacts</a></li>
-                <li><a href="?/how-many-studes">How many studies?</a></li>
+                <li><a href="?/count-contacts">How many contacts?</a><span id=count_contacts__ID></span></li>
+                <li><a href="?/count-studes">How many studies?</a><span id=count_studies__ID></span></li>
+                <li><a href="?/count-newsletters">How many contacts who subscribed the newsletter?</a><span id=count_newsletters__ID></span></li>
             </ul>
         </div>
     </div>
@@ -25,11 +26,54 @@
                 e.stopPropagation();
                 var module_name=$(this).attr('href').replace('?\/','');
                 switch(module_name){
-                    case "how-many-contacts": break;
+                    case "count-contacts": query_contacts(); break;
+                    case "count-studes": query_studies(); break;
+                    case "count-newsletters": query_newsletters(); break;
+                    default: if(module_name!="") $vm.show_module(module_name,{}); break;
                 }
-                if(module_name!="") $vm.show_module(module_name,{})
+                //if(module_name!="") $vm.show_module(module_name,{})
             })
             //---------------------------------------------------------------
+            var query_contacts=function(){
+                var path="/api/data/v9.1/RetrieveTotalRecordCount(EntityNames=['contact'])"
+                $vm.get_microsoft_data(path,function(status,data){
+                    if(status==200){
+                        var jD=JSON.parse(data);
+                        var n=jD["EntityRecordCountCollection"]["Values"][0];
+                        $('#count_contacts__ID').text(n);
+                    }
+                    else alert("Error: "+status);
+                })
+            }
+            //---------------------------------------------------------------
+            var query_studies=function(){
+                var path="/api/data/v9.1/RetrieveTotalRecordCount(EntityNames=['woolcock_study'])"
+                $vm.get_microsoft_data(path,function(status,data){
+                    if(status==200){
+                        var jD=JSON.parse(data);
+                        var n=jD["EntityRecordCountCollection"]["Values"][0];
+                        $('#count_studies__ID').text(n);
+                    }
+                    else alert("Error: "+status);
+                })
+            }
+            //---------------------------------------------------------------
+            var query_newsletters=function(){
+                var path="/api/data/v9.1/contacts?$count=true&$filter=woolcock_newsletter eq true"
+                $vm.get_microsoft_data(path,function(status,data){
+                    if(status==200){
+                        var jD=JSON.parse(data);
+                        console.log(jD)
+                        //var n=jD["EntityRecordCountCollection"]["Values"][0];
+                        //$('#count_studies__ID').text(n);
+                    }
+                    else alert("Error: "+status);
+                })
+            }
+            //---------------------------------------------------------------
+            "path":"/api/data/v9.1/contacts?$count=true&$filter=woolcock_newsletter eq true",
+
+
         }
     </script>
     <style>

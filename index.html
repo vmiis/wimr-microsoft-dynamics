@@ -224,16 +224,16 @@
             $vm.boot(); //start from here
             //=================================================
             $(window).on('scroll', function() {
-            if($vm.active_name=='home'){
-                var y=-$(window).scrollTop()/3;
-                $('body').css({ 'background-position-y': y+'px'});
-                var r=-y/100; if(r>0.5) r=0.5;
-                $("#header").css("background","rgba(0,0,0,"+r+")");
-            }
-            //=================================================
-        });
-        //-------------------------------------
-        if('scrollRestoration' in history) {history.scrollRestoration = 'manual';}
+                if($vm.active_name=='home'){
+                    var y=-$(window).scrollTop()/3;
+                    $('body').css({ 'background-position-y': y+'px'});
+                    var r=-y/100; if(r>0.5) r=0.5;
+                    $("#header").css("background","rgba(0,0,0,"+r+")");
+                }
+                //=================================================
+            });
+            //-------------------------------------
+            if('scrollRestoration' in history) {history.scrollRestoration = 'manual';}
         </script>
         <!----------------------------------------------->
         <style main style>
