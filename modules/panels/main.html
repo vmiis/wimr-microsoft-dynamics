@@ -1,4 +1,5 @@
 <div id=D__ID>
+    <span id=msg__ID style='margin-left:20px;margin-top:20px'></span>
     <div id=panel__ID>
         <div>
             <b>Search</b>
@@ -13,6 +14,8 @@
                 <li><a href="?/count-contacts">How many contacts?</a><span id=count_contacts__ID></span></li>
                 <li><a href="?/count-studes">How many studies?</a><span id=count_studies__ID></span></li>
                 <li><a href="?/count-newsletters">How many contacts who subscribed the newsletter?</a><span id=count_newsletters__ID></span></li>
+                <li><a href="?/count-snapforms">How many contacts who registered from snapforms?</a><span id=count_snapforms__ID></span></li>
+                <li><a href="?/count-snapforms_30d">How many contacts who registered from snapforms in last 30 days?</a><span id=count_snapforms_30d__ID></span></li>
             </ul>
         </div>
     </div>
@@ -29,6 +32,8 @@
                     case "count-contacts": query_contacts(); break;
                     case "count-studes": query_studies(); break;
                     case "count-newsletters": query_newsletters(); break;
+                    case "count-snapforms": query_snapforms(); break;
+                    case "count-snapforms_30d": query_snapforms_30d(); break;
                     default: if(module_name!="") $vm.show_module(module_name,{}); break;
                 }
                 //if(module_name!="") $vm.show_module(module_name,{})
@@ -36,9 +41,12 @@
             //---------------------------------------------------------------
             var query_contacts=function(){
                 var path="/api/data/v9.1/RetrieveTotalRecordCount(EntityNames=['contact'])"
+                $('#msg__ID').text("Please wait...");
                 $vm.get_microsoft_data(path,function(status,data){
+                    $('#msg__ID').text("");
                     if(status==200){
                         var jD=JSON.parse(data);
+                        console.log(jD);
                         var n=jD["EntityRecordCountCollection"]["Values"][0];
                         $('#count_contacts__ID').text(n);
                     }
@@ -48,8 +56,11 @@
             //---------------------------------------------------------------
             var query_studies=function(){
                 var path="/api/data/v9.1/RetrieveTotalRecordCount(EntityNames=['woolcock_study'])"
+                $('#msg__ID').text("Please wait...");
                 $vm.get_microsoft_data(path,function(status,data){
+                    $('#msg__ID').text("");
                     if(status==200){
+                        console.log(jD);
                         var jD=JSON.parse(data);
                         var n=jD["EntityRecordCountCollection"]["Values"][0];
                         $('#count_studies__ID').text(n);
@@ -59,21 +70,57 @@
             }
             //---------------------------------------------------------------
             var query_newsletters=function(){
-                var path="/api/data/v9.1/contacts?$count=true&$filter=woolcock_newsletter eq true"
+                var path="/api/data/v9.1/contacts?$count=true&$filter=woolcock_newsletter eq true&$top=1"
+                $('#msg__ID').text("Please wait...");
                 $vm.get_microsoft_data(path,function(status,data){
+                    $('#msg__ID').text("");
                     if(status==200){
+                        console.log(jD);
                         var jD=JSON.parse(data);
                         console.log(jD)
-                        //var n=jD["EntityRecordCountCollection"]["Values"][0];
-                        //$('#count_studies__ID').text(n);
+                        var n=jD["@odata.count"];
+                        $('#count_newsletters__ID').text(n);
                     }
                     else alert("Error: "+status);
                 })
             }
             //---------------------------------------------------------------
-            "path":"/api/data/v9.1/contacts?$count=true&$filter=woolcock_newsletter eq true",
-
-
+            var query_snapforms=function(){
+                var path="/api/data/v9.1/contacts?$count=true&$filter=woolcock_contactsource eq 1 and createdby/fullname eq 'Zhiming Administrator' &$top=1"
+                $('#msg__ID').text("Please wait...");
+                $vm.get_microsoft_data(path,function(status,data){
+                    $('#msg__ID').text("");
+                    if(status==200){
+                        console.log(jD);
+                        var jD=JSON.parse(data);
+                        console.log(jD)
+                        var n=jD["@odata.count"];
+                        $('#count_snapforms__ID').text(n);
+                    }
+                    else alert("Error: "+status);
+                })
+            }
+            //---------------------------------------------------------------
+            var query_snapforms_30d=function(){
+                var d=new Date();
+                d.setDate(d.getDate()-30);
+                d=d.toISOString();
+                var path="/api/data/v9.1/contacts?$count=true&$filter=woolcock_contactsource eq 1 and createdon gt '"+d+"' and createdby/fullname eq 'Zhiming Administrator' &$top=1"
+                $('#msg__ID').text("Please wait...");
+                $vm.get_microsoft_data(path,function(status,data){
+                    $('#msg__ID').text("");
+                    if(status==200){
+                        console.log(jD);
+                        var jD=JSON.parse(data);
+                        console.log(jD)
+                        var n=jD["@odata.count"];
+                        $('#count_snapforms_30d__ID').text(n);
+                    }
+                    else alert("Error: "+status);
+                })
+            }
+            //---------------------------------------------------------------
+            //"path":"/api/data/v9.1/contacts?$count=true&$filter=woolcock_newsletter eq true",
         }
     </script>
     <style>
