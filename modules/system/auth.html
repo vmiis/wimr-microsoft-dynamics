@@ -38,14 +38,12 @@
                         var cmd=state.split('.')[0];
                         var id=state.split('.').pop();
                         $vm.request_token(id,cmd,code,u,href,function(id,res){
-                            var api_name=id.split('_')[0];
-                            $vm.user_name=sessionStorage.getItem(api_name+" username");
-                            $vm.displayname=sessionStorage.getItem(api_name+" displayname");
                             $vm.show_user();
                         });
                     }
                 }
             }
+            //------------------------------------
             $vm.init(function(){
                 $vm.init_status=1;
                 var id="wimr-dynamics";
@@ -53,6 +51,26 @@
                 if(sessionStorage.getItem(id+" displayname")!=null)  $vm.displayname=sessionStorage.getItem(id+" displayname");
                 $vm.show_user();
             })
+            //------------------------------------
+            $vm.request_token=function(id,cmd,code,redirect_uri,href,callback){
+                var api_name=id.split('_')[0];  //where to request
+                $vm.request({api:api_name,cmd:cmd,token:code,redirect_uri:redirect_uri},function(res){
+                    if(res.status=='ok'){
+                        switch(cmd){
+                            case "exchange-microsoft2-token":
+                                var expires_in=res.result.a.expires_in;
+                                sessionStorage.setItem(id+" oauth expire",new Date(new Date().getTime()+expires_in*1000).toLocaleString());
+                                sessionStorage.setItem(id+" oauth",JSON.stringify(res.result));
+                                sessionStorage.setItem(id+" username",res.result.user_name);
+                                sessionStorage.setItem(id+" displayname",res.result.displayname);
+                                $vm.user_name=sessionStorage.getItem(id+" username");
+                                $vm.displayname=sessionStorage.getItem(id+" displayname");
+                                callback(id);
+                                break;
+                        }
+                    }
+                })
+            }
             //------------------------------------
         }
     </script>
