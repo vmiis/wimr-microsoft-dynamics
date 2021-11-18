@@ -14,7 +14,7 @@
                 //url+='&scope=openid user.read profile'; 
                 url+='&scope=https://woolcock.crm6.dynamics.com/.default offline_access'; 
                 url+='&response_mode=fragment';
-                url+='&state=exchange-microsoft2-token.wimr';
+                url+='&state=exchange-microsoft2-token.wimr-dynamics';
                 url+='&nonce=678910';
                 url+='&prompt=select_account';
                 window.open(url);
@@ -48,7 +48,7 @@
             }
             $vm.init(function(){
                 $vm.init_status=1;
-                var id="wimr";
+                var id="wimr-dynamics";
                 if(sessionStorage.getItem(id+" username")!=null)     $vm.user_name=sessionStorage.getItem(id+" username");
                 if(sessionStorage.getItem(id+" displayname")!=null)  $vm.displayname=sessionStorage.getItem(id+" displayname");
                 $vm.show_user();

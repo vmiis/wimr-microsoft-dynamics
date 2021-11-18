@@ -131,7 +131,7 @@
             }
             //---------------------------------------
             $vm.get_microsoft_access_token=function(callback){
-                var t=sessionStorage.getItem("wimr oauth");
+                var t=sessionStorage.getItem("wimr-dynamics oauth");
                 if(t==null){
                     alert("You haven't login!");
                     callback("");
@@ -147,7 +147,7 @@
                     var mhost="login.microsoftonline.com";
                     var path="/common/oauth2/v2.0/token";
                     var scope=""
-                    $vm.request({api:"wimr",cmd:"refresh-microsoft-token",token:refresh_token,host:mhost,path:path,scope:scope},function(res){
+                    $vm.request({api:"wimr-dynamics",cmd:"refresh-microsoft-token",token:refresh_token,host:mhost,path:path,scope:scope},function(res){
                         var expires_in=res.result.a.expires_in;
                         var expire=new Date(new Date().getTime()+expires_in*1000).toLocaleString();
                         sessionStorage.setItem("wimr"+" oauth expire",expire);

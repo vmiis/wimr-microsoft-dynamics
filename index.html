@@ -31,7 +31,7 @@
         <!----------------------------------------------->
         <script app code>
             //---------------------------------------------
-            $VmAPI={};$vm.ver=[0.06,0.01]; $vm['jquery-ui-min-js']=1;
+            $VmAPI={};$vm.ver=[0.07,0.01]; $vm['jquery-ui-min-js']=1;
             $vm.flexindex=new FlexSearch({  doc: {id: "id",field: ["title","contents"]}    });
             $vm.hosting_path=window.location.href.substring(0, window.location.href.split('?')[0].lastIndexOf('/'));
             //---------------------------------------------
@@ -40,8 +40,8 @@
                 footer:         {url:$vm.hosting_path+"/modules/site/footer.html"},
                 home:           {url:$vm.hosting_path+"/modules/site/home.html",router:1},
                 auth:           {url:$vm.hosting_path+"/modules/system/auth.html"},
-                token:          {url:$vm.hosting_path+"/modules/system/token.html"},
-                query:          {url:$vm.hosting_path+"/modules/system/query.html"},
+                //token:          {url:$vm.hosting_path+"/modules/system/token.html"},
+                //query:          {url:$vm.hosting_path+"/modules/system/query.html"},
                 vmext:          {url:$vm.hosting_path+"/modules/system/vm-extension.html"},
                 panel:          {url:$vm.hosting_path+"/modules/panels/main.html"},
 
@@ -77,14 +77,13 @@
             $('#content').css('padding-top',hearder_height);
             $vm.root_layout_content_slot='content'
             $vm.api_addresses={
-                "wimr":"https://wimr-snapforms.woolcock.org.au",
-                "wapp":"https://api.wappsystem.com"
+                "wimr-dynamics":"https://wimr-snapforms.woolcock.org.au",
             }
-            $vm.api_default="wimr";
+            $vm.api_default="wimr-dynamics";
             $vm.api_address='https://wimr-snapforms.woolcock.org.au';
             if(window.location.hostname=='127.0.0.1' || window.location.hostname=='localhost'){ 
                 $vm.localhost=true;
-                $vm.api_addresses.wimr="https://wimr-snapforms.woolcock.org.au:442";
+                $vm.api_addresses["wimr-dynamics"]="https://wimr-snapforms.woolcock.org.au:442";
                 $vm.api_address='https://wimr-snapforms.woolcock.org.au:442';
             }
             $vm._id=0;$vm.reload='';$vm.debug_message=true;
@@ -175,8 +174,8 @@
                 $vm.load_component('header','header',{});
                 $vm.load_component('footer','footer',{});
                 $vm.install_module('auth','',{},function(name,id){});
-                $vm.install_module('token','',{},function(name,id){});
-                $vm.install_module('query','',{},function(name,id){});
+                //$vm.install_module('token','',{},function(name,id){});
+                //$vm.install_module('query','',{},function(name,id){});
                 $vm.install_module('vmext','',{},function(name,id){});
                 var install_one=function(m,t){
                     setTimeout(function (){ 
