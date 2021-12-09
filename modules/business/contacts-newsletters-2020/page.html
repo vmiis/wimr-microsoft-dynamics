@@ -1,0 +1,119 @@
+<div id=D__ID>
+    <div id=toolbar__ID class="navbar navbar-default">
+        <div>
+            <button id=query__ID type=button class="btn btn-secondary" title='Search for keyword'>Query</button>
+            <span id=name__ID style='margin-left:50px; margin-right:50px;font-weight:bold;'></span> Total Number of records: <span id=total__ID></span>
+            <button id=export__ID type=button class="btn btn-secondary" title='Export' style='margin-left:50px;margin-right:30px'>Export</button>
+        </div>
+    </div>
+    <div>
+        <table id="grid__ID"></table>
+    </div>
+    <script>
+        function F__ID(){
+            //-------------------------------------------------
+            var m=$vm.module_list['__MODULE__'];
+            //-------------------------------------------------
+            var name="Contacts 2020";
+            var columns=`
+                First Name|firstname
+                Last Name|lastname
+                Email|emailaddress1
+                Postcode|address1_postalcode
+                Newsletter|woolcock_newsletter@OData.Community.Display.V1.FormattedValue
+                Registration Type|woolcock_registrationtype@OData.Community.Display.V1.FormattedValue
+                Source|woolcock_contactsource@OData.Community.Display.V1.FormattedValue
+                Created on|createdon|DATE
+                Created by|createdby.fullname
+            `
+            //Registered Study|_woolcock_volunteerstudyid_value@OData.Community.Display.V1.FormattedValue
+            //-------------------------------------------------
+            var records=[];
+            //-------------------------------------------------
+            var query_data=function(from, to){
+                var filter="&$filter=createdon ge "+from+" and createdon lt "+to +" and woolcock_newsletter eq true";
+                var path="/api/data/v9.1/contacts?$count=true"+filter+"&$expand=createdby($select=fullname)&$orderby=createdon&$top=5000";
+                //filter="$apply=groupby((month((createdon)),aggregate(firstname/$count as Number))";
+                //filter="$apply=groupby(   (Microsoft.Dynamics.CRM.Month('createdon'))  )";
+                //filter="$apply=groupby((firstname))";
+                //filter="$filter=month(createdon) eq 10";
+                //var path="/api/data/v9.1/contacts?"+filter;
+                $('#grid__ID').html('Please wait...');
+                $vm.get_microsoft_data(path,function(status,data){
+                    $('#grid__ID').html('');
+                    if(status==200){
+                        var jD=JSON.parse(data);
+                        console.log(jD);
+                        records=$vm.grid_render_1("__ID", {
+                            name:name,
+                            columns:columns,
+                            rows:jD.value,
+                        })
+                    }
+                    else console.log(status);
+                })
+            }
+            //-------------------------------------------------
+            $('#D__ID').on('load',function(){
+                query_data("2020-01-01","2021-01-01");
+            })
+            //-------------------------------------------------
+            $('#query__ID').on('click',function(){
+                query_data("2020-01-01","2021-01-01");
+            })
+            //-------------------------------------------------
+            $('#export__ID').on('click',function(){
+                if(records!=[]) $vm.download_csv(name+".csv",records);
+            })
+            //-------------------------------------------------
+        }
+    </script>
+    <style>
+        #D__ID{
+            height:100%;
+            background-color:#fff;
+        }
+        #toolbar__ID{
+            background-color:#ccc;
+            padding:5px 10px;
+            margin-bottom:0px;
+            overflow:hidden
+        }
+        #D__ID table{
+            font-size:13px;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+        #grid__ID{
+            width:100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+            margin: 0;
+            border-width: 0;
+        }
+        #grid__ID th{
+            font-weight: bold;
+            background-color:#EEE;
+            padding:5px;
+            border: 1px solid #CCC;
+        }
+        #grid__ID td{
+            font-weight: 300;
+            /*background-color:#FFF;*/
+            padding:3px;
+            border: 1px solid #CCC;
+            vertical-align: top;
+            white-space: pre;
+            background-color: white;
+        }
+
+        #grid__ID tr:hover { 
+            background-color:#EEE; 
+        }        
+        
+        #grid__ID tr td:first-child{
+            padding-left:10px;
+            padding-right:10px;
+            background-color:#EEE;
+        }
+    </style>
+</div>
