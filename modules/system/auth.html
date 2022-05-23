@@ -49,7 +49,7 @@
                 var id="wimr-dynamics";
                 if(sessionStorage.getItem(id+" username")!=null)     $vm.user_name=sessionStorage.getItem(id+" username");
                 if(sessionStorage.getItem(id+" displayname")!=null)  $vm.displayname=sessionStorage.getItem(id+" displayname");
-                $vm.show_user();
+                if($vm.show_user!=undefined) $vm.show_user();
             })
             //------------------------------------
             $vm.request_token=function(id,cmd,code,redirect_uri,href,callback){
