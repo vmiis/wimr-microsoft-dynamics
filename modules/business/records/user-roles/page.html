@@ -1,0 +1,138 @@
+<div id=D__ID>
+    <div id=toolbar__ID class="navbar navbar-default">
+        <div>
+            <div style='display:inline-block;width:200px'><input id=keyword__ID type="text" class="form-control" placeholder="Starts with in name"></div>
+            <button id=query__ID type=button class="btn btn-secondary" title='Search for keyword'><i class="fa fa-search" ></i></button>
+            <span id=name__ID style='margin-left:50px; margin-right:50px;font-weight:bold;'></span> Total Number of records: <span id=total__ID></span> <span style='margin-left:30px'>(Maximum returned: 200)</span>
+            <button id=export__ID type=button class="btn btn-secondary" title='Export' style='margin-left:50px;margin-right:30px'>Export</button>
+        </div>
+    </div>
+    <div>
+        <table id="grid__ID"></table>
+    </div>
+    <script>
+        function F__ID(){
+            //-------------------------------------------------
+            var m=$vm.module_list['__MODULE__'];
+            //-------------------------------------------------
+            var name="User's Roles";
+            var columns=`
+                Name|fullname
+                Role|role
+            `
+            //-------------------------------------------------
+            var records=[];
+            //-------------------------------------------------
+            var fetchData = {
+                fullname: "%",
+                firstname: "%23"
+            };
+            //-------------------------------------------------
+            var records=[];
+            //-------------------------------------------------
+            var query_data=function(s){
+                fetchData.fullname=s+'%';
+                var fetchXml = [
+                    "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>",
+                    "  <entity name='systemuser'>",
+                    "    <attribute name='firstname' />",
+                    "    <attribute name='fullname' />",
+                    "    <link-entity name='systemuserroles' from='systemuserid' to='systemuserid'>",
+                    "      <link-entity name='role' from='roleid' to='roleid'>",
+                    "        <attribute name='name' alias='role'  />",
+                    "      </link-entity>",
+                    "    </link-entity>",
+                    "    <filter>",
+                    "      <condition attribute='firstname' operator='like' value='", fetchData.fullname/*a%*/, "'/>",
+                    "      <condition attribute='firstname' operator='ne' value='", fetchData.firstname/*#*/, "'/>",
+                    "    </filter>",
+                    "  </entity>",
+                    "</fetch>",
+                ].join("");    
+                
+                
+
+                
+                var path="/api/data/v9.1/systemusers?fetchXml="+fetchXml;
+                //-------------------
+                $vm.get_microsoft_data(path,function(status,data){
+                    if(status==200){
+                        var jD=JSON.parse(data);
+                        console.log(jD);
+                        records=$vm.grid_render_1("__ID", {
+                            name:name,
+                            columns:columns,
+                            rows:jD.value,
+                        })
+                        $('#total__ID').text(jD["@odata.count"]);
+                    }
+                    else console.log(status);
+                })
+            }
+            //-------------------------------------------------
+            $('#D__ID').on('load',function(){
+                query_data('');
+            })
+            //-------------------------------------------------
+            $('#query__ID').on('click',function(){
+                query_data($('#keyword__ID').val());
+            })
+            //-------------------------------------------------
+            $('#export__ID').on('click',function(){
+                if(records!=[]) $vm.download_csv(name+".csv",records);
+            })
+            //-------------------------------------------------
+        }
+    </script>
+    <style>
+        #D__ID{
+            height:100%;
+            background-color:#fff;
+        }
+        #toolbar__ID{
+            background-color:#ccc;
+            padding:5px 10px;
+            margin-bottom:0px;
+            overflow:hidden
+        }
+        #D__ID table{
+            font-size:13px;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+        #grid__ID{
+            width:100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+            margin: 0;
+            border-width: 0;
+        }
+        #grid__ID th{
+            font-weight: bold;
+            background-color:#EEE;
+            padding:5px;
+            border: 1px solid #CCC;
+        }
+        #grid__ID td:first-child,#grid__ID td:nth-child(2){
+            width:10px;
+        }
+        #grid__ID td{
+            font-weight: 300;
+            /*background-color:#FFF;*/
+            padding:3px;
+            border: 1px solid #CCC;
+            vertical-align: top;
+            white-space: pre;
+            background-color: white;
+        }
+
+        #grid__ID tr:hover { 
+            background-color:#EEE; 
+        }        
+        
+        #grid__ID tr td:first-child{
+            padding-left:10px;
+            padding-right:10px;
+            background-color:#EEE;
+        }
+    </style>
+</div>
