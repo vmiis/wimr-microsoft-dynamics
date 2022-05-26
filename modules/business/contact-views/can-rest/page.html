@@ -62,7 +62,7 @@
             var query_data=function(s){
                 fetchData.firstname=s+'%';
                 var fetchXml = [
-                    "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>",
+                    "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true' >",
                     "  <entity name='contact'>",
                     "    <attribute name='contactid' />",
                     "    <filter type='and'>",
@@ -91,7 +91,7 @@
                     "  </entity>",
                     "</fetch>",
                 ].join("");
-                var path="/api/data/v9.1/contacts?fetchXml="+fetchXml;
+                var path="/api/data/v9.1/contacts?$count=true&$top=200&fetchXml="+fetchXml;
                 //-------------------
             //var query_data=function(s){
                 //var path="/api/data/v9.1/"+query;
