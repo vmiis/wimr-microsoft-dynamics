@@ -18,6 +18,8 @@
     m[p+"solutions"]             ={url:H+"/business/solutions/page.html",form_module:'jsonv',prefix:p};
     m[p+"can-rest"]              ={url:H+"/business/contact-views/can-rest/page.html",form_module:'jsonv',prefix:p};
     m[p+"can-rest-team"]         ={url:H+"/business/contact-team/can-rest/page.html",form_module:'jsonv',prefix:p};
+    m[p+"effect-team"]           ={url:H+"/business/contact-team/effect/page.html",form_module:'jsonv',prefix:p};
+    m[p+"clever-team"]           ={url:H+"/business/contact-team/clever/page.html",form_module:'jsonv',prefix:p};
     m[p+"can-rest-join"]         ={url:H+"/business/contact-join/can-rest/page.html",form_module:'jsonv',prefix:p};
     m[p+"user-roles"]            ={url:H+"/business/records/user-roles/page.html",form_module:'jsonv',prefix:p};
     m[p+"user-license"]          ={url:H+"/business/records/user-license/page.html",form_module:'jsonv',prefix:p};
