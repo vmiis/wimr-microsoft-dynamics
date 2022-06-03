@@ -23,4 +23,7 @@
     m[p+"can-rest-join"]         ={url:H+"/business/contact-join/can-rest/page.html",form_module:'jsonv',prefix:p};
     m[p+"user-roles"]            ={url:H+"/business/records/user-roles/page.html",form_module:'jsonv',prefix:p};
     m[p+"user-license"]          ={url:H+"/business/records/user-license/page.html",form_module:'jsonv',prefix:p};
+    m[p+"team-members"]          ={url:H+"/business/records/team-members/page.html",form_module:'jsonv',prefix:p};
+    m[p+"teams"]                 ={url:H+"/business/records/teams/page.html",form_module:'jsonv',prefix:p};
+    m[p+"researchers"]           ={url:H+"/business/records/researchers/page.html",form_module:'jsonv',prefix:p};
 })();
