@@ -1,7 +1,7 @@
 <div id=D__ID>
     <div id=toolbar__ID class="navbar navbar-default">
         <div>
-            <div style='display:inline-block;width:200px'><input id=keyword__ID type="text" class="form-control" placeholder="Starts with in team"></div>
+            <div style='display:inline-block;width:200px'><input id=keyword__ID type="text" class="form-control" placeholder="Starts with in study"></div>
             <button id=query__ID type=button class="btn btn-secondary" title='Search for keyword'><i class="fa fa-search" ></i></button>
             <span id=name__ID style='margin-left:50px; margin-right:50px;font-weight:bold;'></span> Total Number of records: <span id=total__ID></span> <span style='margin-left:30px'>(Maximum returned: 200)</span>
             <button id=export__ID type=button class="btn btn-secondary" title='Export' style='margin-left:50px;margin-right:30px'>Export</button>
@@ -17,38 +17,44 @@
             //-------------------------------------------------
             var name="Team members";
             var columns=`
-                Team|name
-                Description|description
+                Study|study
+                Researcher|member
+                Create on|createdon|DATE
+                Create by|d_name
             `
             //-------------------------------------------------
             var records=[];
             //-------------------------------------------------
             var fetchData = {
                 name: "%",
-                createdby: "d61ad895-5f4c-e911-a97e-000d3ad05ad0"
             };            
             //-------------------------------------------------
             var records=[];
             //-------------------------------------------------
             var query_data=function(s){
-                
-                
                 fetchData.name=s+'%';
                 var fetchXml = [
-                "<fetch top='50'>",
-                "  <entity name='team'>",
-                "    <attribute name='name'/>",
-                "    <attribute name='description' />",
-                "    <filter>",
-                "      <condition attribute='createdby' operator='eq' value='", fetchData.createdby, "' uiname='Zhiming Administrator' uitype='systemuser'/>",
-                "      <condition attribute='name' operator='like' value='", fetchData.name, "'/>",
-                "    </filter>",
-                "    <order attribute='name'/>",
+                "<fetch top='200'>",
+                "  <entity name='wimr_studypi'>",
+                "    <attribute name='createdon'/>",
+                "    <link-entity name='woolcock_study' from='woolcock_studyid' to='wimr_study'>",
+                "      <attribute name='woolcock_name' alias='study' />",
+                "      <filter>",
+                "        <condition attribute='woolcock_name' operator='like' value='", fetchData.name, "'/>",
+                "      </filter>",
+                "      <order attribute='woolcock_name'/>",
+                "    </link-entity>",
+                "    <link-entity name='woolcock_projectleads' from='woolcock_projectleadsid' to='wimr_projectlead'>",
+                "      <attribute name='woolcock_name' alias='member'/>",
+                "    </link-entity>",
+                "    <link-entity name='systemuser' from='systemuserid' to='createdby'>",
+                "      <attribute name='fullname' alias='d_name' />",
+                "    </link-entity>",
                 "  </entity>",
                 "</fetch>"
-                ].join("");                
-               
-                var path="/api/data/v9.1/teams?fetchXml="+fetchXml;
+                ].join("");               
+                var path="/api/data/v9.1/wimr_studypis?fetchXml="+fetchXml;
+                                         
                 //-------------------
                 $vm.get_microsoft_data(path,function(status,data){
                     if(status==200){

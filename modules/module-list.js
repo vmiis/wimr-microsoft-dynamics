@@ -16,14 +16,28 @@
     m[p+"number-of-sleep-study-by-year-and-month"]={url:H+"/business/number-of-sleep-study-by-year-and-month/page.html",Table:'flow-activity',form_module:'jsonv',prefix:p,router:1};
     m[p+"number-of-sleep-study-by-year"]={url:H+"/business/number-of-sleep-study-by-year/page.html",Table:'flow-activity',form_module:'jsonv',prefix:p,router:1};
     m[p+"solutions"]             ={url:H+"/business/solutions/page.html",form_module:'jsonv',prefix:p};
+    
     m[p+"can-rest"]              ={url:H+"/business/contact-views/can-rest/page.html",form_module:'jsonv',prefix:p};
+    m[p+"wolf-filter"]           ={url:H+"/business/contact-views/wolf/page.html",form_module:'jsonv',prefix:p};
+    m[p+"clever-filter"]         ={url:H+"/business/contact-views/clever/page.html",form_module:'jsonv',prefix:p};
+    
     m[p+"can-rest-team"]         ={url:H+"/business/contact-team/can-rest/page.html",form_module:'jsonv',prefix:p};
     m[p+"effect-team"]           ={url:H+"/business/contact-team/effect/page.html",form_module:'jsonv',prefix:p};
     m[p+"clever-team"]           ={url:H+"/business/contact-team/clever/page.html",form_module:'jsonv',prefix:p};
+    m[p+"wolf-team"]             ={url:H+"/business/contact-team/wolf/page.html",form_module:'jsonv',prefix:p};
+    m[p+"effect-of-3-month"]     ={url:H+"/business/contact-team/effect-of-3-month/page.html",form_module:'jsonv',prefix:p};
+    m[p+"sleep-and-emotional-memory-study"]     ={url:H+"/business/contact-team/sleep-and-emotional-memory-study/page.html",form_module:'jsonv',prefix:p};
+    m[p+"targeting-sleep-spindles-to-improve-cognition-in-ageing"]     ={url:H+"/business/contact-team/targeting-sleep-spindles-to-improve-cognition-in-ageing/page.html",form_module:'jsonv',prefix:p};
+    
     m[p+"can-rest-join"]         ={url:H+"/business/contact-join/can-rest/page.html",form_module:'jsonv',prefix:p};
+    m[p+"clever-join"]         ={url:H+"/business/contact-join/clever/page.html",form_module:'jsonv',prefix:p};
+    
     m[p+"user-roles"]            ={url:H+"/business/records/user-roles/page.html",form_module:'jsonv',prefix:p};
     m[p+"user-license"]          ={url:H+"/business/records/user-license/page.html",form_module:'jsonv',prefix:p};
     m[p+"team-members"]          ={url:H+"/business/records/team-members/page.html",form_module:'jsonv',prefix:p};
     m[p+"teams"]                 ={url:H+"/business/records/teams/page.html",form_module:'jsonv',prefix:p};
     m[p+"researchers"]           ={url:H+"/business/records/researchers/page.html",form_module:'jsonv',prefix:p};
+    m[p+"researchers-in-study"]  ={url:H+"/business/records/researchers-in-study/page.html",form_module:'jsonv',prefix:p};
+    m[p+"users"]                 ={url:H+"/business/records/users/page.html",form_module:'jsonv',prefix:p};
 })();
+

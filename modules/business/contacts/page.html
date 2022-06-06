@@ -45,6 +45,8 @@
                             columns:columns,
                             rows:jD.value,
                         })
+                        $('#total__ID').text(jD["@odata.count"]);
+                        if(jD["@odata.count"]=="5000") $('#total__ID').text("over "+ jD["@odata.count"]);
                     }
                     else console.log(status);
                 })

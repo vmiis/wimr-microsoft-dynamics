@@ -1,7 +1,7 @@
 <div id=D__ID>
     <div id=toolbar__ID class="navbar navbar-default">
         <div>
-            <div style='display:inline-block;width:200px'><input id=keyword__ID type="text" class="form-control" placeholder="Starts with in team"></div>
+            <div style='display:inline-block;width:200px'><input id=keyword__ID type="text" class="form-control" placeholder="Starts with in first name"></div>
             <button id=query__ID type=button class="btn btn-secondary" title='Search for keyword'><i class="fa fa-search" ></i></button>
             <span id=name__ID style='margin-left:50px; margin-right:50px;font-weight:bold;'></span> Total Number of records: <span id=total__ID></span> <span style='margin-left:30px'>(Maximum returned: 200)</span>
             <button id=export__ID type=button class="btn btn-secondary" title='Export' style='margin-left:50px;margin-right:30px'>Export</button>
@@ -15,40 +15,56 @@
             //-------------------------------------------------
             var m=$vm.module_list['__MODULE__'];
             //-------------------------------------------------
-            var name="Team members";
+            var name="Contacts";
             var columns=`
-                Team|name
-                Description|description
+                First Name|firstname
+                Last Name|lastname
+                Email|emailaddress1
+                Birth Date|birthdate
+                Age|woolcock_age
+                Postcode|address1_composite
+                Conditions|woolcock_multiselectcondition@OData.Community.Display.V1.FormattedValue
+                Source|woolcock_contactsource@OData.Community.Display.V1.FormattedValue
+                Created on|createdon|DATE
+                Created by|_createdby_value@OData.Community.Display.V1.FormattedValue
             `
             //-------------------------------------------------
-            var records=[];
-            //-------------------------------------------------
             var fetchData = {
-                name: "%",
-                createdby: "d61ad895-5f4c-e911-a97e-000d3ad05ad0"
-            };            
+                    firstname: "a%",
+                    principalid: "44f0da9c-27e5-ec11-bb3d-002248944297"
+                };
             //-------------------------------------------------
             var records=[];
             //-------------------------------------------------
             var query_data=function(s){
-                
-                
-                fetchData.name=s+'%';
+                fetchData.firstname=s+'%';
                 var fetchXml = [
-                "<fetch top='50'>",
-                "  <entity name='team'>",
-                "    <attribute name='name'/>",
-                "    <attribute name='description' />",
-                "    <filter>",
-                "      <condition attribute='createdby' operator='eq' value='", fetchData.createdby, "' uiname='Zhiming Administrator' uitype='systemuser'/>",
-                "      <condition attribute='name' operator='like' value='", fetchData.name, "'/>",
-                "    </filter>",
-                "    <order attribute='name'/>",
-                "  </entity>",
-                "</fetch>"
-                ].join("");                
-               
-                var path="/api/data/v9.1/teams?fetchXml="+fetchXml;
+                    "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>",
+                    "  <entity name='contact'>",
+                    "    <attribute name='contactid' />",
+                    "    <attribute name='firstname' />",
+                    "    <attribute name='lastname' />",
+                    "    <attribute name='emailaddress1' />",
+                    "    <attribute name='birthdate' />",
+                    "    <attribute name='woolcock_age' />",
+                    "    <attribute name='address1_postalcode' />",
+                    "    <attribute name='woolcock_multiselectcondition' />",
+                    "    <attribute name='woolcock_contactsource' />",
+                    "    <attribute name='createdon' />",                    
+                    "    <attribute name='createdby' />",                    
+                    "    <filter>",
+                    "      <condition attribute='firstname' operator='like' value='", fetchData.firstname/*a%*/, "'/>",
+                    "    </filter>",
+                    "    <link-entity name='principalobjectaccess' from='objectid' to='contactid'>",
+                    "      <filter>",
+                    "        <condition attribute='principalid' operator='eq' value='", fetchData.principalid, "'/>",
+                    "      </filter>",
+                    "    </link-entity>",
+                    "    <order attribute='createdon' descending='true' />",
+                    "  </entity>",
+                    "</fetch>",
+                ].join("");
+                var path="/api/data/v9.1/contacts?$count=true&$top=200&fetchXml="+fetchXml;
                 //-------------------
                 $vm.get_microsoft_data(path,function(status,data){
                     if(status==200){
@@ -106,9 +122,6 @@
             background-color:#EEE;
             padding:5px;
             border: 1px solid #CCC;
-        }
-        #grid__ID td:first-child,#grid__ID td:nth-child(2){
-            width:10px;
         }
         #grid__ID td{
             font-weight: 300;

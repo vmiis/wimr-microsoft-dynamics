@@ -15,10 +15,12 @@
             //-------------------------------------------------
             var m=$vm.module_list['__MODULE__'];
             //-------------------------------------------------
-            var name="Team members";
+            var name="Researchers";
             var columns=`
                 Name|woolcock_name
-                Fullname|a_fullname
+                Full Name|a_fullname
+                Created on|createdon|DATE
+                Created by|b_createdby
             `
             //-------------------------------------------------
             var records=[];
@@ -34,11 +36,16 @@
                 var fetchXml = [
                 "<fetch version='1.0' mapping='logical'>",
                 "  <entity name='woolcock_projectleads'>",
+                "    <attribute name='createdon'/>",
+                "    <attribute name='createdby'/>",
                 "    <attribute name='wimr_internaluser'/>",
                 "    <attribute name='woolcock_name'/>",
                 "    <order attribute='woolcock_name'/>",
                 "    <link-entity name='systemuser' from='systemuserid' to='wimr_internaluser' link-type='outer' alias='aaa'>",
                 "      <attribute name='fullname' alias='a_fullname'/>",
+                "    </link-entity>",
+                "    <link-entity name='systemuser' from='systemuserid' to='createdby'>",
+                "      <attribute name='fullname' alias='b_createdby' />",
                 "    </link-entity>",
                 "  </entity>",
                 "</fetch>"

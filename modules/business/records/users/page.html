@@ -1,7 +1,7 @@
 <div id=D__ID>
     <div id=toolbar__ID class="navbar navbar-default">
         <div>
-            <div style='display:inline-block;width:200px'><input id=keyword__ID type="text" class="form-control" placeholder="Starts with in team"></div>
+            <div style='display:inline-block;width:200px'><input id=keyword__ID type="text" class="form-control" placeholder="Starts with in name"></div>
             <button id=query__ID type=button class="btn btn-secondary" title='Search for keyword'><i class="fa fa-search" ></i></button>
             <span id=name__ID style='margin-left:50px; margin-right:50px;font-weight:bold;'></span> Total Number of records: <span id=total__ID></span> <span style='margin-left:30px'>(Maximum returned: 200)</span>
             <button id=export__ID type=button class="btn btn-secondary" title='Export' style='margin-left:50px;margin-right:30px'>Export</button>
@@ -15,17 +15,21 @@
             //-------------------------------------------------
             var m=$vm.module_list['__MODULE__'];
             //-------------------------------------------------
-            var name="Team members";
+            var name="System Users";
             var columns=`
-                Team|name
-                Description|description
+                Name|fullname
+                Title|title
+                Email|internalemailaddress
+                Telephone|address1_telephone1
+                Access|accessmode
             `
             //-------------------------------------------------
             var records=[];
             //-------------------------------------------------
             var fetchData = {
                 name: "%",
-                createdby: "d61ad895-5f4c-e911-a97e-000d3ad05ad0"
+                "accessmode": "3",
+                isdisabled:0
             };            
             //-------------------------------------------------
             var records=[];
@@ -35,20 +39,24 @@
                 
                 fetchData.name=s+'%';
                 var fetchXml = [
-                "<fetch top='50'>",
-                "  <entity name='team'>",
-                "    <attribute name='name'/>",
-                "    <attribute name='description' />",
+                "<fetch top='200'>",
+                "  <entity name='systemuser'>",
+                "    <attribute name='internalemailaddress'/>",
+                "    <attribute name='fullname'/>",
+                "    <attribute name='title'/>",
+                "    <attribute name='isdisabled'/>",
+                "    <attribute name='accessmode'/>",
+                "    <attribute name='address1_telephone1'/>",
                 "    <filter>",
-                "      <condition attribute='createdby' operator='eq' value='", fetchData.createdby, "' uiname='Zhiming Administrator' uitype='systemuser'/>",
-                "      <condition attribute='name' operator='like' value='", fetchData.name, "'/>",
+                "      <condition attribute='accessmode' operator='lt' value='", fetchData.accessmode, "'/>",
+                "      <condition attribute='fullname' operator='like' value='", fetchData.name, "'/>",
+                "      <condition attribute='isdisabled' operator='eq' value='", fetchData.isdisabled/*0*/, "'/>",
                 "    </filter>",
-                "    <order attribute='name'/>",
+                "    <order attribute='fullname'/>",
                 "  </entity>",
                 "</fetch>"
-                ].join("");                
-               
-                var path="/api/data/v9.1/teams?fetchXml="+fetchXml;
+                ].join("");               
+                var path="/api/data/v9.1/systemusers?fetchXml="+fetchXml;
                 //-------------------
                 $vm.get_microsoft_data(path,function(status,data){
                     if(status==200){

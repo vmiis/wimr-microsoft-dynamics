@@ -27,15 +27,18 @@
                 Source|woolcock_contactsource@OData.Community.Display.V1.FormattedValue
                 Created on|createdon|DATE
                 Created by|_createdby_value@OData.Community.Display.V1.FormattedValue
-                Modified on|modifiedon|DATE
-                Modified by|_modifiedby_value@OData.Community.Display.V1.FormattedValue
             `
             //-------------------------------------------------
             var records=[];
             //-------------------------------------------------
             var fetchData = {
+                    woolcock_age: "18",
+                    woolcock_age2: "55",
+                    woolcock_multiselectcondition: "2008",
+                    woolcock_participateinanyresearchstudy: "1",
+                    gendercode:1,
+                    address1_postalcode:2,
                     firstname: "a%",
-                    woolcock_volunteerstudyid:'5cb17150-becc-ec11-a7b6-000d3ad0ec4b'
                 };
             //-------------------------------------------------
             var records=[];
@@ -43,9 +46,21 @@
             var query_data=function(s){
                 fetchData.firstname=s+'%';
                 var fetchXml = [
-                    "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>",
+                    "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true' >",
                     "  <entity name='contact'>",
                     "    <attribute name='contactid' />",
+                    "    <filter type='and'>",
+                    "      <condition attribute='woolcock_age' operator='ge' value='", fetchData.woolcock_age, "'/>",
+                    "      <condition attribute='woolcock_age' operator='le' value='", fetchData.woolcock_age2, "'/>",
+                    "      <condition attribute='woolcock_multiselectcondition' operator='contain-values'>",
+                    "        <value>", fetchData.woolcock_multiselectcondition/*2008*/, "</value>",
+                    "      </condition>",
+                    "      <condition attribute='woolcock_participateinanyresearchstudy' operator='eq' value='", fetchData.woolcock_participateinanyresearchstudy/*1*/, "'/>",
+                    "      <condition attribute='gendercode' operator='eq' value='", fetchData.gendercode/*1*/, "'/>",
+                    "      <condition attribute='woolcock_isunregister' operator='ne' value='1' />",
+                    "      <condition attribute='address1_postalcode' operator='begins-with' value='", fetchData.address1_postalcode/*2*/, "'/>",
+                    "    </filter>",
+                    
                     "    <attribute name='firstname' />",
                     "    <attribute name='lastname' />",
                     "    <attribute name='emailaddress1' />",
@@ -56,18 +71,19 @@
                     "    <attribute name='woolcock_contactsource' />",
                     "    <attribute name='createdon' />",                    
                     "    <attribute name='createdby' />",                    
-                    "    <attribute name='modifiedon' />",    
-                    "    <attribute name='modifiedby' />",    
                     "    <filter>",
                     "      <condition attribute='firstname' operator='like' value='", fetchData.firstname/*a%*/, "'/>",
-                    "      <condition attribute='woolcock_volunteerstudyid' operator='eq' value='", fetchData.woolcock_volunteerstudyid/*woolcock_study*/, "'/>",
                     "    </filter>",
                     "    <order attribute='createdon' descending='true' />",
                     "  </entity>",
                     "</fetch>",
                 ].join("");
-                var path="/api/data/v9.1/contacts?fetchXml="+fetchXml;
+                var path="/api/data/v9.1/contacts?$count=true&$top=200&fetchXml="+fetchXml;
                 //-------------------
+            //var query_data=function(s){
+                //var path="/api/data/v9.1/"+query;
+                //if(s!='') path="/api/data/v9.1/"+query+" and contains(fullname,'"+s+"')";
+                //if(s!='') path="/api/data/v9.1/"+query+" and startswith(firstname,'"+s+"')";
                 $vm.get_microsoft_data(path,function(status,data){
                     if(status==200){
                         var jD=JSON.parse(data);
