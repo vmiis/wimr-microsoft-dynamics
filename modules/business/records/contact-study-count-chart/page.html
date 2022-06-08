@@ -10,66 +10,83 @@
     <div>
         <table id="grid__ID"></table>
     </div>
+
+    <div id=chart_container__ID>
+		<div id=chart_div__ID></div>
+    </div>
+
     <script>
         function F__ID(){
             //-------------------------------------------------
             var m=$vm.module_list['__MODULE__'];
             //-------------------------------------------------
-            var name="User's Roles";
+            var name="Number of research participants";
             var columns=`
-                Name|fullname
-                Role|role
+                Count|count
+                Study|aaa@OData.Community.Display.V1.FormattedValue
             `
             //-------------------------------------------------
             var records=[];
             //-------------------------------------------------
             var fetchData = {
-                fullname: "%",
-                firstname: "%23",
-                isdisabled:0
-            };
+                name: "%",
+            };            
             //-------------------------------------------------
             var records=[];
+            //google.charts.load('current', {packages: ['corechart', 'bar']});
+			//google.charts.setOnLoadCallback(draw_chart);
             //-------------------------------------------------
             var query_data=function(s){
-                fetchData.fullname=s+'%';
+                fetchData.name=s+'%';
                 var fetchXml = [
-                    "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>",
-                    "  <entity name='systemuser'>",
-                    "    <attribute name='firstname' />",
-                    "    <attribute name='fullname' />",
-                    "    <link-entity name='systemuserroles' from='systemuserid' to='systemuserid' link-type='outer'>",
-                    "      <link-entity name='role' from='roleid' to='roleid'  link-type='outer'>",
-                    "        <attribute name='name' alias='role'  />",
-                    "      </link-entity>",
-                    "    </link-entity>",
+                    "<fetch distinct='true' aggregate='true'>",
+                    "  <entity name='contact'>",
+                    "    <attribute name='woolcock_volunteerstudyid' alias='aaa' groupby='true'/>",
+                    "    <attribute name='contactid' alias='count' aggregate='count'/>",
+                    "    <order alias='count' descending='true'/>",
                     "    <filter>",
-                    "      <condition attribute='firstname' operator='like' value='", fetchData.fullname/*a%*/, "'/>",
-                    "      <condition attribute='firstname' operator='ne' value='", fetchData.firstname/*#*/, "'/>",
-                    "      <condition attribute='isdisabled' operator='eq' value='", fetchData.isdisabled/*0*/, "'/>",
+                    "      <condition attribute='woolcock_volunteerstudyid' operator='not-null'/>",
                     "    </filter>",
+                    "    <link-entity name='woolcock_study' from='woolcock_studyid' to='woolcock_volunteerstudyid' alias='ccc'>",
+                    "      <filter>",
+                    "        <condition attribute='woolcock_name' operator='like' value='", fetchData.name, "'/>",
+                    "      </filter>",
+                    "    </link-entity>",
                     "  </entity>",
-                    "</fetch>",
-                ].join("");    
-                
-                var path="/api/data/v9.1/systemusers?fetchXml="+fetchXml;
+                    "</fetch>"
+                ].join("");                
+                var path="/api/data/v9.1/contacts?$count=true&$top=200&fetchXml="+fetchXml;
                 //-------------------
                 $vm.get_microsoft_data(path,function(status,data){
                     if(status==200){
                         var jD=JSON.parse(data);
                         console.log(jD);
-                        records=$vm.grid_render_1("__ID", {
-                            name:name,
-                            columns:columns,
-                            rows:jD.value,
-                        })
+                        var ds=[['Study','Count',{ role: 'annotation'}]]
+				        var N=jD.value.length;
+                        for(var i=0;i<N;i++){
+                            var r=[];
+                            r.push(jD.value[i]['aaa@OData.Community.Display.V1.FormattedValue']);
+                            r.push(jD.value[i]['count']);
+                            r.push(jD.value[i]['count']);
+                            ds.push(r);
+                        }
+                        console.log(ds);
                         $('#total__ID').text(jD["@odata.count"]);
+                        var data = google.visualization.arrayToDataTable(ds);
+                        var options = {
+                            title: 'Number of participants in each study',
+                            legend: { position: "none" }
+                        }; 
+				        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div__ID'));
+				        chart.draw(data, options);	
                     }
                     else console.log(status);
                 })
             }
             //-------------------------------------------------
             $('#D__ID').on('load',function(){
+                //console.log(11111111111)
+                $('#chart_div__ID').css('height',($vm.min_height-100));
                 query_data('');
             })
             //-------------------------------------------------
@@ -94,44 +111,10 @@
             margin-bottom:0px;
             overflow:hidden
         }
-        #D__ID table{
-            font-size:13px;
-            font-family: Helvetica, Arial, sans-serif;
-        }
-        #grid__ID{
-            width:100%;
-            border-collapse: collapse;
-            border-spacing: 0;
-            margin: 0;
-            border-width: 0;
-        }
-        #grid__ID th{
-            font-weight: bold;
-            background-color:#EEE;
-            padding:5px;
-            border: 1px solid #CCC;
-        }
-        #grid__ID td:first-child,#grid__ID td:nth-child(2){
-            width:10px;
-        }
-        #grid__ID td{
-            font-weight: 300;
-            /*background-color:#FFF;*/
-            padding:3px;
-            border: 1px solid #CCC;
-            vertical-align: top;
-            white-space: pre;
-            background-color: white;
-        }
 
-        #grid__ID tr:hover { 
-            background-color:#EEE; 
-        }        
-        
-        #grid__ID tr td:first-child{
-            padding-left:10px;
-            padding-right:10px;
-            background-color:#EEE;
-        }
+		#chart_div__ID{
+			/*height:500px;*/
+			max-width:1400px;
+		}
     </style>
 </div>

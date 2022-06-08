@@ -28,7 +28,7 @@
     m[p+"clever-team"]                                                  ={url:H+"/business/contact-team/clever/page.html",form_module:'jsonv',prefix:p};
     m[p+"effect-team"]                                                  ={url:H+"/business/contact-team/effect/page.html",form_module:'jsonv',prefix:p};
     m[p+"wolf-team"]                                                    ={url:H+"/business/contact-team/wolf/page.html",form_module:'jsonv',prefix:p};
-    m[p+"effect-of-3-month"]                                            ={url:H+"/business/contact-team/effect-of-3-month/page.html",form_module:'jsonv',prefix:p};
+    m[p+"effect-of-3-month"]                                            ={url:H+"/business/contact-team/melatonin-supplementation-in-mild-cognitive-impairment/page.html",form_module:'jsonv',prefix:p};
     m[p+"sleep-and-emotional-memory-study"]                             ={url:H+"/business/contact-team/sleep-and-emotional-memory-study/page.html",form_module:'jsonv',prefix:p};
     m[p+"targeting-sleep-spindles-to-improve-cognition-in-ageing"]      ={url:H+"/business/contact-team/targeting-sleep-spindles-to-improve-cognition-in-ageing/page.html",form_module:'jsonv',prefix:p};
     m[p+"icoco-team"]                                                   ={url:H+"/business/contact-team/icoco/page.html",form_module:'jsonv',prefix:p};
@@ -37,7 +37,7 @@
     m[p+"clever-join"]                                                      ={url:H+"/business/contact-join/clever/page.html",form_module:'jsonv',prefix:p};
     m[p+"effect-join"]                                                      ={url:H+"/business/contact-join/effect/page.html",form_module:'jsonv',prefix:p};
     m[p+"wolf-join"]                                                        ={url:H+"/business/contact-join/wolf/page.html",form_module:'jsonv',prefix:p};
-    m[p+"effect-of-3-month-join"]                                           ={url:H+"/business/contact-join/effect-of-3-month/page.html",form_module:'jsonv',prefix:p};
+    m[p+"effect-of-3-month-join"]                                           ={url:H+"/business/contact-join/melatonin-supplementation-in-mild-cognitive-impairment/page.html",form_module:'jsonv',prefix:p};
     m[p+"sleep-and-emotional-memory-study-join"]                            ={url:H+"/business/contact-join/sleep-and-emotional-memory-study/page.html",form_module:'jsonv',prefix:p};
     m[p+"targeting-sleep-spindles-to-improve-cognition-in-ageing-join"]     ={url:H+"/business/contact-join/targeting-sleep-spindles-to-improve-cognition-in-ageing/page.html",form_module:'jsonv',prefix:p};
     m[p+"icoco-join"]                                                       ={url:H+"/business/contact-join/icoco/page.html",form_module:'jsonv',prefix:p};
@@ -49,5 +49,8 @@
     m[p+"researchers"]           ={url:H+"/business/records/researchers/page.html",form_module:'jsonv',prefix:p};
     m[p+"researchers-in-study"]  ={url:H+"/business/records/researchers-in-study/page.html",form_module:'jsonv',prefix:p};
     m[p+"users"]                 ={url:H+"/business/records/users/page.html",form_module:'jsonv',prefix:p};
+    m[p+"contact-study-count"]          ={url:H+"/business/records/contact-study-count/page.html",form_module:'jsonv',prefix:p};
+    m[p+"contact-study-count-chart"]    ={url:H+"/business/records/contact-study-count-chart/page.html",form_module:'jsonv',prefix:p};
+    
 })();
 

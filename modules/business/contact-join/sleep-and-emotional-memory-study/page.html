@@ -1,7 +1,7 @@
 <div id=D__ID>
     <div id=toolbar__ID class="navbar navbar-default">
         <div>
-            <div style='display:inline-block;width:200px'><input id=keyword__ID type="text" class="form-control" placeholder="Starts with in name"></div>
+            <div style='display:inline-block;width:200px'><input id=keyword__ID type="text" class="form-control" placeholder="Starts with in first name"></div>
             <button id=query__ID type=button class="btn btn-secondary" title='Search for keyword'><i class="fa fa-search" ></i></button>
             <span id=name__ID style='margin-left:50px; margin-right:50px;font-weight:bold;'></span> Total Number of records: <span id=total__ID></span> <span style='margin-left:30px'>(Maximum returned: 200)</span>
             <button id=export__ID type=button class="btn btn-secondary" title='Export' style='margin-left:50px;margin-right:30px'>Export</button>
@@ -15,44 +15,58 @@
             //-------------------------------------------------
             var m=$vm.module_list['__MODULE__'];
             //-------------------------------------------------
-            var name="User's Roles";
+            var name="Contacts";
             var columns=`
-                Name|fullname
-                Role|role
+                First Name|firstname
+                Last Name|lastname
+                Email|emailaddress1
+                Birth Date|birthdate
+                Age|woolcock_age
+                Postcode|address1_composite
+                Conditions|woolcock_multiselectcondition@OData.Community.Display.V1.FormattedValue
+                Source|woolcock_contactsource@OData.Community.Display.V1.FormattedValue
+                Created on|createdon|DATE
+                Created by|_createdby_value@OData.Community.Display.V1.FormattedValue
+                Modified on|modifiedon|DATE
+                Modified by|_modifiedby_value@OData.Community.Display.V1.FormattedValue
             `
             //-------------------------------------------------
             var records=[];
             //-------------------------------------------------
             var fetchData = {
-                fullname: "%",
-                firstname: "%23",
-                isdisabled:0
-            };
+                    firstname: "a%",
+                    woolcock_volunteerstudyid:'959d947f-bf9f-e911-a971-000d3ad244fd'
+                };
             //-------------------------------------------------
             var records=[];
             //-------------------------------------------------
             var query_data=function(s){
-                fetchData.fullname=s+'%';
+                fetchData.firstname=s+'%';
                 var fetchXml = [
                     "<fetch version='1.0' output-format='xml-platform' mapping='logical' distinct='true'>",
-                    "  <entity name='systemuser'>",
+                    "  <entity name='contact'>",
+                    "    <attribute name='contactid' />",
                     "    <attribute name='firstname' />",
-                    "    <attribute name='fullname' />",
-                    "    <link-entity name='systemuserroles' from='systemuserid' to='systemuserid' link-type='outer'>",
-                    "      <link-entity name='role' from='roleid' to='roleid'  link-type='outer'>",
-                    "        <attribute name='name' alias='role'  />",
-                    "      </link-entity>",
-                    "    </link-entity>",
+                    "    <attribute name='lastname' />",
+                    "    <attribute name='emailaddress1' />",
+                    "    <attribute name='birthdate' />",
+                    "    <attribute name='woolcock_age' />",
+                    "    <attribute name='address1_postalcode' />",
+                    "    <attribute name='woolcock_multiselectcondition' />",
+                    "    <attribute name='woolcock_contactsource' />",
+                    "    <attribute name='createdon' />",                    
+                    "    <attribute name='createdby' />",                    
+                    "    <attribute name='modifiedon' />",    
+                    "    <attribute name='modifiedby' />",    
                     "    <filter>",
-                    "      <condition attribute='firstname' operator='like' value='", fetchData.fullname/*a%*/, "'/>",
-                    "      <condition attribute='firstname' operator='ne' value='", fetchData.firstname/*#*/, "'/>",
-                    "      <condition attribute='isdisabled' operator='eq' value='", fetchData.isdisabled/*0*/, "'/>",
+                    "      <condition attribute='firstname' operator='like' value='", fetchData.firstname/*a%*/, "'/>",
+                    "      <condition attribute='woolcock_volunteerstudyid' operator='eq' value='", fetchData.woolcock_volunteerstudyid/*woolcock_study*/, "'/>",
                     "    </filter>",
+                    "    <order attribute='createdon' descending='true' />",
                     "  </entity>",
                     "</fetch>",
-                ].join("");    
-                
-                var path="/api/data/v9.1/systemusers?fetchXml="+fetchXml;
+                ].join("");
+                var path="/api/data/v9.1/contacts?fetchXml="+fetchXml;
                 //-------------------
                 $vm.get_microsoft_data(path,function(status,data){
                     if(status==200){
@@ -110,9 +124,6 @@
             background-color:#EEE;
             padding:5px;
             border: 1px solid #CCC;
-        }
-        #grid__ID td:first-child,#grid__ID td:nth-child(2){
-            width:10px;
         }
         #grid__ID td{
             font-weight: 300;
