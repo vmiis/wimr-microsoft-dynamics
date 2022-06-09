@@ -182,6 +182,27 @@
                 });
             }
             //-------------------------------------------------
+            $vm.get_microsoft_data_v2=function(path, param, callback){
+                $vm.get_microsoft_access_token(function(access_token){
+                    //var path="/api/data/v9.1/woolcock_studies?$count=true&$expand=createdby($select=fullname)&$orderby=createdon desc";
+                    var url="https://woolcock.crm6.dynamics.com/"+path;
+                    var headers={
+                        "Accept": "application/json",
+                        'Authorization': 'Bearer ' + access_token,
+                        'Content-Type': 'application/json; charset=utf-8',
+                        'OData-MaxVersion': '4.0',
+                        "OData-Version": '4.0',
+                        //"Prefer": 'odata.maxpagesize='+num
+                        "Prefer":"odata.include-annotations=OData.Community.Display.V1.FormattedValue" //get rlation table's value
+                    };
+                    var data="";
+                    $vm.http_request(url,"GET",headers,JSON.stringify(data),function(status,data){
+                        callback(param,status,data);
+                    });
+
+                });
+            }
+            //-------------------------------------------------
 
 
         }

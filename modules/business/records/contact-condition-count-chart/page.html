@@ -1,0 +1,173 @@
+<div id=D__ID>
+    <div id=toolbar__ID class="navbar navbar-default">
+        <div>
+            <!--<div style='display:inline-block;width:200px'><input id=keyword__ID type="text" class="form-control" placeholder="Starts with in name"></div>-->
+            <button id=query__ID type=button class="btn btn-secondary" title='Refresh'><i class="fa fa-search" ></i></button>
+            <span id=name__ID style='margin-left:50px; margin-right:50px;font-weight:bold;'></span> Total Number of records: <span id=total__ID></span> <span style='margin-left:30px'>(Maximum returned: 200)</span>
+            <button id=export__ID type=button class="btn btn-secondary" title='Export' style='margin-left:50px;margin-right:30px'>Export</button>
+        </div>
+    </div>
+    <div id=chart_container__ID>
+		<div id=chart_div__ID></div>
+    </div>
+    <script>
+        function F__ID(){
+            //-------------------------------------------------
+            var m=$vm.module_list['__MODULE__'];
+            //-------------------------------------------------
+            var name="Conditions";
+            var columns=`
+                Count|count
+                Condition|condition
+            `
+            //-------------------------------------------------
+            var records=[];
+            //-------------------------------------------------
+            var fetchData = {
+                name: "%",
+            };            
+            //-------------------------------------------------
+            var conditions=[
+                ["Lung Cancer",2001],
+                ["Asthma",2002],
+                ["COPD (Chronic Obstructive Pulmonary Disease)",2003],
+                ["Insomnia",2004],
+                ["Chronic Bronchitis",2005],
+                ["Narcolepsy",2006],
+                ["Emphysema",2007],
+                ["Obstructive Sleep Apnoea (OSA)",2008],
+                ["Rhinitis",2009],
+                ["Restless Leg Syndrome",2010],
+                ["I do not have a respiratory condition or sleep problem",2011],
+            ]
+            //-------------------------------------------------
+            function compare( a, b ) {
+                if ( a.count > b.count ){
+                    return -1;
+                }
+                if ( a.count < b.count ){
+                    return 1;
+                }
+                return 0;
+            }
+            //-------------------------------------------------
+            var query_data=function(s){
+                var result=[];
+                var N=conditions.length+1;
+                var process_result=function(param,data){
+                    //console.log(data.value);
+                    //console.log(param)
+                    result.push({condition:param,count:data.value[0].c});
+                    N--;
+                    if(N==0){
+                        console.log(result);
+                        records=result;
+                        result.sort(compare);
+                        /*
+                        records=$vm.grid_render_1("__ID", {
+                            name:name,
+                            columns:columns,
+                            rows:result,
+                        })
+                        */
+                        var ds=[['Condition','Count',{ role: 'annotation'}]]
+				        var NN=result.length;
+                        for(var i=0;i<NN;i++){
+                            var r=[];
+                            r.push(result[i]['condition']);
+                            r.push(result[i]['count']);
+                            r.push(result[i]['count']);
+                            ds.push(r);
+                        }
+                        console.log(ds);
+                        var data = google.visualization.arrayToDataTable(ds);
+                        var options = {
+                            title: 'Volunteer Conditions',
+                            legend: { position: "none" }
+                        }; 
+				        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div__ID'));
+				        chart.draw(data, options);	
+                    }
+                }
+                //-------------------
+                for(var i=0;i<conditions.length;i++){
+                    var fetchData = {
+                        "woolcock_multiselectcondition": "",
+                        "woolcock_multiselectcondition2": "2001"
+                    };
+                    fetchData.woolcock_multiselectcondition2=conditions[i][1];
+                    var fetchXml = [
+                        "<fetch top='50' distinct='true' aggregate='true'>",
+                        "  <entity name='contact'>",
+                        "    <attribute name='contactid' alias='c' aggregate='count'/>",
+                        "    <filter>",
+                        "      <condition attribute='woolcock_multiselectcondition' operator='contain-values' value='", fetchData.woolcock_multiselectcondition, "'>",
+                        "        <value>", fetchData.woolcock_multiselectcondition2, "</value>",
+                        "      </condition>",
+                        "    </filter>",
+                        "  </entity>",
+                        "</fetch>"
+                    ].join("");                
+                    var path="/api/data/v9.1/contacts?fetchXml="+fetchXml;
+                    $vm.get_microsoft_data_v2(path,conditions[i][0],function(param,status,data){
+                        if(status==200){
+                            var jD=JSON.parse(data);
+                            process_result(param,jD);
+                        }
+                        else console.log(status);
+                    })
+                }
+                var fetchXml = [
+                    "<fetch top='50' distinct='true' aggregate='true'>",
+                    "  <entity name='contact'>",
+                    "    <attribute name='contactid' alias='c' aggregate='count'/>",
+                    "    <filter>",
+                    "      <condition attribute='woolcock_multiselectcondition' operator='null'/>",
+                    "    </filter>",
+                    "  </entity>",
+                    "</fetch>"
+                ].join("");
+                var path="/api/data/v9.1/contacts?fetchXml="+fetchXml;
+                $vm.get_microsoft_data_v2(path,"No conditions",function(param,status,data){
+                    if(status==200){
+                        var jD=JSON.parse(data);
+                        process_result(param,jD);
+                    }
+                    else console.log(status);
+                })
+
+            }
+            //-------------------------------------------------
+            $('#D__ID').on('load',function(){
+                query_data('');
+                $('#chart_div__ID').css('height',($vm.min_height-100));
+            })
+            //-------------------------------------------------
+            $('#query__ID').on('click',function(){
+                query_data($('#keyword__ID').val());
+            })
+            //-------------------------------------------------
+            $('#export__ID').on('click',function(){
+                if(records!=[]) $vm.download_csv(name+".csv",records);
+            })
+            //-------------------------------------------------
+        }
+    </script>
+    <style>
+        #D__ID{
+            height:100%;
+            background-color:#fff;
+        }
+        #toolbar__ID{
+            background-color:#ccc;
+            padding:5px 10px;
+            margin-bottom:0px;
+            overflow:hidden
+        }
+
+		#chart_div__ID{
+			/*height:500px;*/
+			max-width:1400px;
+		}
+    </style>
+</div>
