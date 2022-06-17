@@ -1,0 +1,134 @@
+<div id=D__ID>
+    <div id=toolbar__ID class="navbar navbar-default">
+        <div>
+            <button id=query__ID type=button class="btn btn-secondary" title='Search for keyword'>Query</button>
+            <span id=name__ID style='margin-left:50px; margin-right:50px;font-weight:bold;'></span> Total Number of records: <span id=total__ID></span> 
+            <button id=export__ID type=button class="btn btn-secondary" title='Export' style='margin-left:50px;margin-right:30px'>Export</button>
+        </div>
+    </div>
+    <div>
+        <table id="grid__ID"></table>
+    </div>
+    <script>
+        function F__ID(){
+            //-------------------------------------------------
+            var m=$vm.module_list['__MODULE__'];
+            //-------------------------------------------------
+            var name="Number of contacts grouped by month in 2022";
+            var columns=`
+                Month|month
+                Count|count
+            `
+            //-------------------------------------------------
+            var records=[];
+            //-------------------------------------------------
+            var fetchData = {
+                name: "%",
+            };            
+            //-------------------------------------------------
+            var records=[];
+            //-------------------------------------------------
+            var query_data=function(s){
+                var fetchData = {
+                "createdon": "",
+                "createdon2": "2022-01-01",
+                "createdon3": "2022-12-31"
+                };
+                var fetchXml = [
+                "<fetch top='50' distinct='true' aggregate='true'>",
+                "  <entity name='contact'>",
+                "    <attribute name='contactid' alias='count' aggregate='count'/>",
+                "    <attribute name='createdon' alias='month' groupby='true' dategrouping='month'/>",
+                "    <filter>",
+                "      <condition attribute='createdon' operator='between' value='", fetchData.createdon/**/, "'>",
+                "        <value>", fetchData.createdon2/*2022-01-01*/, "</value>",
+                "        <value>", fetchData.createdon3/*2022-12-31*/, "</value>",
+                "      </condition>",
+                "    </filter>",
+                "    <order alias='month'/>",
+                "  </entity>",
+                "</fetch>"
+                ].join("");
+                var path="/api/data/v9.1/contacts?$count=true&$top=200&fetchXml="+fetchXml;
+                //-------------------
+                $vm.get_microsoft_data(path,function(status,data){
+                    if(status==200){
+                        var jD=JSON.parse(data);
+                        console.log(jD);
+                        records=$vm.grid_render_1("__ID", {
+                            name:name,
+                            columns:columns,
+                            rows:jD.value,
+                        })
+                        $('#total__ID').text(jD["@odata.count"]);
+                    }
+                    else console.log(status);
+                })
+            }
+            //-------------------------------------------------
+            $('#D__ID').on('load',function(){
+                query_data('');
+            })
+            //-------------------------------------------------
+            $('#query__ID').on('click',function(){
+                query_data($('#keyword__ID').val());
+            })
+            //-------------------------------------------------
+            $('#export__ID').on('click',function(){
+                if(records!=[]) $vm.download_csv(name+".csv",records);
+            })
+            //-------------------------------------------------
+        }
+    </script>
+    <style>
+        #D__ID{
+            height:100%;
+            background-color:#fff;
+        }
+        #toolbar__ID{
+            background-color:#ccc;
+            padding:5px 10px;
+            margin-bottom:0px;
+            overflow:hidden
+        }
+        #D__ID table{
+            font-size:13px;
+            font-family: Helvetica, Arial, sans-serif;
+        }
+        #grid__ID{
+            /*width:100%;*/
+            border-collapse: collapse;
+            border-spacing: 0;
+            margin: 0;
+            border-width: 0;
+        }
+        #grid__ID th{
+            font-weight: bold;
+            background-color:#EEE;
+            padding:5px;
+            border: 1px solid #CCC;
+        }
+        #grid__ID td:first-child,#grid__ID td:nth-child(2){
+            width:10px;
+        }
+        #grid__ID td{
+            font-weight: 300;
+            /*background-color:#FFF;*/
+            padding:3px;
+            border: 1px solid #CCC;
+            vertical-align: top;
+            white-space: pre;
+            background-color: white;
+        }
+
+        #grid__ID tr:hover { 
+            background-color:#EEE; 
+        }        
+        
+        #grid__ID tr td:first-child{
+            padding-left:10px;
+            padding-right:10px;
+            background-color:#EEE;
+        }
+    </style>
+</div>

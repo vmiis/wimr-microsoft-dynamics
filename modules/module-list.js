@@ -54,6 +54,8 @@
     m[p+"contact-condition-count"]      ={url:H+"/business/records/contact-condition-count/page.html",form_module:'jsonv',prefix:p};
     m[p+"contact-condition-count-chart"]={url:H+"/business/records/contact-condition-count-chart/page.html",form_module:'jsonv',prefix:p};
     
+    m[p+"contact-count-by-month-2022"]          ={url:H+"/business/records/contact-count-by-month-2022/page.html",form_module:'jsonv',prefix:p};
+    m[p+"contact-count-by-month-2022-chart"]          ={url:H+"/business/records/contact-count-by-month-2022-chart/page.html",form_module:'jsonv',prefix:p};
     
 })();
 
