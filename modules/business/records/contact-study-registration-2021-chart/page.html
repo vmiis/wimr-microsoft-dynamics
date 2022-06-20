@@ -1,0 +1,119 @@
+<div id=D__ID>
+    <div id=toolbar__ID class="navbar navbar-default">
+        <div>
+            <button id=query__ID type=button class="btn btn-secondary" title='Query'>Query</button>
+            <span id=name__ID style='margin-left:50px; margin-right:50px;font-weight:bold;'></span> Total Number of records: <span id=total__ID></span>
+        </div>
+    </div>
+    <div id=chart_container__ID>
+		<div id=chart_div__ID></div>
+    </div>
+
+    <script>
+        function F__ID(){
+            //-------------------------------------------------
+            var m=$vm.module_list['__MODULE__'];
+            //-------------------------------------------------
+            var name="Research Study Registration in 2021";
+            var columns=`
+                Count|count
+                Study|aaa@OData.Community.Display.V1.FormattedValue
+            `
+            //-------------------------------------------------
+            var records=[];
+            //-------------------------------------------------
+            var fetchData = {
+                name: "%",
+            };            
+            //-------------------------------------------------
+            var records=[];
+            //google.charts.load('current', {packages: ['corechart', 'bar']});
+			//google.charts.setOnLoadCallback(draw_chart);
+            //-------------------------------------------------
+            var query_data=function(s){
+                var fetchData = {
+                "createdon": "",
+                "createdon2": "2021-01-01",
+                "createdon3": "2022-01-01"
+                };
+                var fetchXml = [
+                "<fetch top='500' distinct='true' aggregate='true'>",
+                "  <entity name='contact'>",
+                "    <attribute name='woolcock_volunteerstudyid' alias='study' groupby='true'/>",
+                "    <attribute name='contactid' alias='count' aggregate='count'/>",
+                "    <filter>",
+                "      <condition attribute='createdon' operator='between' value='", fetchData.createdon/**/, "'>",
+                "        <value>", fetchData.createdon2/*2021-01-01*/, "</value>",
+                "        <value>", fetchData.createdon3/*2022-01-01*/, "</value>",
+                "      </condition>",
+                "    </filter>",
+                "    <filter>",
+                "      <condition attribute='woolcock_volunteerstudyid' operator='not-null'/>",
+                "    </filter>",
+                "    <order alias='count' descending='true'/>",
+                "  </entity>",
+                "</fetch>"
+                ].join("");
+                var path="/api/data/v9.1/contacts?$count=true&$top=200&fetchXml="+fetchXml;
+                //-------------------
+                $vm.get_microsoft_data(path,function(status,data){
+                    if(status==200){
+                        var jD=JSON.parse(data);
+                        console.log(jD);
+                        var ds=[['Study','Count',{ role: 'annotation'}]]
+				        var N=jD.value.length;
+                        for(var i=0;i<N;i++){
+                            var r=[];
+                            r.push(jD.value[i]['study@OData.Community.Display.V1.FormattedValue']);
+                            r.push(jD.value[i]['count']);
+                            r.push(jD.value[i]['count']);
+                            ds.push(r);
+                        }
+                        console.log(ds);
+                        $('#total__ID').text(jD["@odata.count"]);
+                        var data = google.visualization.arrayToDataTable(ds);
+                        var options = {
+                            title: name,
+                            legend: { position: "none" }
+                        }; 
+				        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div__ID'));
+				        chart.draw(data, options);	
+                    }
+                    else console.log(status);
+                })
+            }
+            //-------------------------------------------------
+            $('#D__ID').on('load',function(){
+                //console.log(11111111111)
+                $('#chart_div__ID').css('height',($vm.min_height-100));
+                query_data('');
+            })
+            //-------------------------------------------------
+            $('#query__ID').on('click',function(){
+                query_data($('#keyword__ID').val());
+            })
+            //-------------------------------------------------
+            $('#export__ID').on('click',function(){
+                if(records!=[]) $vm.download_csv(name+".csv",records);
+            })
+            //-------------------------------------------------
+        }
+    </script>
+    <style>
+        #D__ID{
+            height:100%;
+            background-color:#fff;
+        }
+        #toolbar__ID{
+            background-color:#ccc;
+            padding:5px 10px;
+            margin-bottom:0px;
+            overflow:hidden
+        }
+
+		#chart_div__ID{
+			/*height:500px;*/
+			max-width:1400px;
+		}
+    </style>
+</div>

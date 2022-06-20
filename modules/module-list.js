@@ -67,6 +67,12 @@
     m[p+"contact-from-portal-count-by-month-2021"]          ={url:H+"/business/records/contact-from-portal-count-by-month-2021/page.html",form_module:'jsonv',prefix:p};
     m[p+"contact-from-portal-count-by-month-2021-chart"]    ={url:H+"/business/records/contact-from-portal-count-by-month-2021-chart/page.html",form_module:'jsonv',prefix:p};
 
-
+    m[p+"contact-study-registration-2021"]          ={url:H+"/business/records/contact-study-registration-2021/page.html",form_module:'jsonv',prefix:p};
+    m[p+"contact-study-registration-2021-chart"]          ={url:H+"/business/records/contact-study-registration-2021-chart/page.html",form_module:'jsonv',prefix:p};
+    m[p+"contact-study-registration-2022"]          ={url:H+"/business/records/contact-study-registration-2022/page.html",form_module:'jsonv',prefix:p};
+    m[p+"contact-study-registration-2022-chart"]          ={url:H+"/business/records/contact-study-registration-2022-chart/page.html",form_module:'jsonv',prefix:p};
+    m[p+"contact-study-registration-all"]          ={url:H+"/business/records/contact-study-registration-all/page.html",form_module:'jsonv',prefix:p};
+    m[p+"contact-study-registration-all-chart"]          ={url:H+"/business/records/contact-study-registration-all-chart/page.html",form_module:'jsonv',prefix:p};
+    
 })();
 
