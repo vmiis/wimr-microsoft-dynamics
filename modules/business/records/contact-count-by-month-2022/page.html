@@ -14,25 +14,22 @@
             //-------------------------------------------------
             var m=$vm.module_list['__MODULE__'];
             //-------------------------------------------------
-            var name="Number of contacts grouped by month in 2022";
+            var name="Number of new contacts grouped by month in 2022";
             var columns=`
                 Month|month
-                Count|count
+                Clinic Register|clinic
+                Portal|portal
+                Unspecified|unspecified
+                Total|all
             `
             //-------------------------------------------------
             var records=[];
             //-------------------------------------------------
-            var fetchData = {
-                name: "%",
-            };            
-            //-------------------------------------------------
-            var records=[];
-            //-------------------------------------------------
-            var query_data=function(s){
+            var query1_data=function(callback){
                 var fetchData = {
                 "createdon": "",
                 "createdon2": "2022-01-01",
-                "createdon3": "2022-12-31"
+                "createdon3": "2023-01-01",
                 };
                 var fetchXml = [
                 "<fetch top='50' distinct='true' aggregate='true'>",
@@ -54,16 +51,130 @@
                 $vm.get_microsoft_data(path,function(status,data){
                     if(status==200){
                         var jD=JSON.parse(data);
-                        console.log(jD);
-                        records=$vm.grid_render_1("__ID", {
-                            name:name,
-                            columns:columns,
-                            rows:jD.value,
-                        })
-                        $('#total__ID').text(jD["@odata.count"]);
+                        callback(1, jD.value);
                     }
                     else console.log(status);
                 })
+            }
+            //-------------------------------------------------
+            var query2_data=function(callback){
+                var fetchData = {
+                    "createdon": "",
+                    "createdon2": "2022-05-01",
+                    "createdon3": "2023-01-01",
+                    "woolcock_contactsource": "2"
+                };
+                var fetchXml = [
+                "<fetch top='50' distinct='true' aggregate='true'>",
+                "  <entity name='contact'>",
+                "    <attribute name='contactid' alias='count' aggregate='count'/>",
+                "    <attribute name='createdon' alias='month' groupby='true' dategrouping='month'/>",
+                "    <filter>",
+                "      <condition attribute='createdon' operator='between' value='", fetchData.createdon/**/, "'>",
+                "        <value>", fetchData.createdon2/*2022-01-01*/, "</value>",
+                "        <value>", fetchData.createdon3/*2022-12-31*/, "</value>",
+                "      </condition>",
+                "      <condition attribute='woolcock_contactsource' operator='eq' value='", fetchData.woolcock_contactsource/*2*/, "'/>",
+                "    </filter>",
+                "    <order alias='month'/>",
+                "  </entity>",
+                "</fetch>"
+                ].join("");
+                var path="/api/data/v9.1/contacts?$count=true&$top=200&fetchXml="+fetchXml;
+                //-------------------
+                $vm.get_microsoft_data(path,function(status,data){
+                    if(status==200){
+                        var jD=JSON.parse(data);
+                        callback(2, jD.value);
+                    }
+                    else console.log(status);
+                })
+            }
+            //-------------------------------------------------
+            var query3_data=function(callback){
+                var fetchData = {
+                    "createdon": "",
+                    "createdon2": "2022-01-01",
+                    "createdon3": "2023-01-01",
+                    "woolcock_contactsource": "1"
+                };
+                var fetchXml = [
+                "<fetch top='50' distinct='true' aggregate='true'>",
+                "  <entity name='contact'>",
+                "    <attribute name='contactid' alias='count' aggregate='count'/>",
+                "    <attribute name='createdon' alias='month' groupby='true' dategrouping='month'/>",
+                "    <filter>",
+                "      <condition attribute='createdon' operator='between' value='", fetchData.createdon/**/, "'>",
+                "        <value>", fetchData.createdon2/*2022-01-01*/, "</value>",
+                "        <value>", fetchData.createdon3/*2022-12-31*/, "</value>",
+                "      </condition>",
+                "      <condition attribute='woolcock_contactsource' operator='eq' value='", fetchData.woolcock_contactsource/*2*/, "'/>",
+                "    </filter>",
+                "    <order alias='month'/>",
+                "  </entity>",
+                "</fetch>"
+                ].join("");
+                var path="/api/data/v9.1/contacts?$count=true&$top=200&fetchXml="+fetchXml;
+                //-------------------
+                $vm.get_microsoft_data(path,function(status,data){
+                    if(status==200){
+                        var jD=JSON.parse(data);
+                        callback(3, jD.value);
+                    }
+                    else console.log(status);
+                })
+            }
+            //-------------------------------------------------
+            var render=function(){
+                records=$vm.grid_render_1("__ID", {
+                    name:name,
+                    columns:columns,
+                    rows:records,
+                })
+                $('#total__ID').text(records.length);
+            }
+            //-------------------------------------------------
+            var query_data=function(s){
+                records=[];
+                for(var i=0;i<12;i++){
+                    var a={month:1+i,portal:0, clinic:0, unspecified:0, all:0};
+                    records.push(a);
+                }
+                var N=3;
+                var process_data=function(a,d){
+                    if(a==1){ 
+                        for(var i=0;i<d.length;i++){
+                            var m=d[i].month;
+                            var c=d[i].count;
+                            records[m-1].all=c;
+                        }
+                    }
+                    if(a==2){ 
+                        for(var i=0;i<d.length;i++){
+                            var m=d[i].month;
+                            var c=d[i].count;
+                            records[m-1].portal=c;
+                        }
+                    }
+                    if(a==3){ 
+                        for(var i=0;i<d.length;i++){
+                            var m=d[i].month;
+                            var c=d[i].count;
+                            records[m-1].clinic=c;
+                        }
+                    }
+                    N--;
+                    if(N==0){
+                        for(var i=0;i<12;i++){
+                            records[i].unspecified=records[i].all-records[i].portal-records[i].clinic;
+                        }
+                        console.log(records);
+                        render();
+                    };
+                }
+                query1_data(function(a,d){ process_data(a,d); }); 
+                query2_data(function(a,d){ process_data(a,d); }); 
+                query3_data(function(a,d){ process_data(a,d); }); 
             }
             //-------------------------------------------------
             $('#D__ID').on('load',function(){

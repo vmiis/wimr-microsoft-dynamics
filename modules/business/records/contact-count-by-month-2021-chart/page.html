@@ -14,15 +14,15 @@
             //-------------------------------------------------
             var m=$vm.module_list['__MODULE__'];
             //-------------------------------------------------
-            var name="Number of new contacts grouped by month in 2022";
+            var name="Number of new contacts grouped by month in 2021";
             //-------------------------------------------------
             var records=[];
             //-------------------------------------------------
             var query1_data=function(callback){
                 var fetchData = {
                 "createdon": "",
-                "createdon2": "2022-01-01",
-                "createdon3": "2023-01-01"
+                "createdon2": "2021-01-01",
+                "createdon3": "2022-01-01"
                 };
                 var fetchXml = [
                 "<fetch top='50' distinct='true' aggregate='true'>",
@@ -31,7 +31,7 @@
                 "    <attribute name='createdon' alias='month' groupby='true' dategrouping='month'/>",
                 "    <filter>",
                 "      <condition attribute='createdon' operator='between' value='", fetchData.createdon/**/, "'>",
-                "        <value>", fetchData.createdon2/*2023-01-01*/, "</value>",
+                "        <value>", fetchData.createdon2/*2022-01-01*/, "</value>",
                 "        <value>", fetchData.createdon3/*2022-12-31*/, "</value>",
                 "      </condition>",
                 "    </filter>",
@@ -53,8 +53,8 @@
             var query2_data=function(callback){
                 var fetchData = {
                     "createdon": "",
-                    "createdon2": "2022-01-01",
-                    "createdon3": "2023-01-01",
+                    "createdon2": "2021-01-01",
+                    "createdon3": "2022-01-01",
                     "woolcock_contactsource": "2"
                 };
                 var fetchXml = [
@@ -64,7 +64,7 @@
                 "    <attribute name='createdon' alias='month' groupby='true' dategrouping='month'/>",
                 "    <filter>",
                 "      <condition attribute='createdon' operator='between' value='", fetchData.createdon/**/, "'>",
-                "        <value>", fetchData.createdon2/*2023-01-01*/, "</value>",
+                "        <value>", fetchData.createdon2/*2022-01-01*/, "</value>",
                 "        <value>", fetchData.createdon3/*2022-12-31*/, "</value>",
                 "      </condition>",
                 "      <condition attribute='woolcock_contactsource' operator='eq' value='", fetchData.woolcock_contactsource/*2*/, "'/>",
@@ -87,8 +87,8 @@
             var query3_data=function(callback){
                 var fetchData = {
                     "createdon": "",
-                    "createdon2": "2022-01-01",
-                    "createdon3": "2023-01-01",
+                    "createdon2": "2021-01-01",
+                    "createdon3": "2022-01-01",
                     "woolcock_contactsource": "1"
                 };
                 var fetchXml = [
@@ -98,7 +98,7 @@
                 "    <attribute name='createdon' alias='month' groupby='true' dategrouping='month'/>",
                 "    <filter>",
                 "      <condition attribute='createdon' operator='between' value='", fetchData.createdon/**/, "'>",
-                "        <value>", fetchData.createdon2/*2023-01-01*/, "</value>",
+                "        <value>", fetchData.createdon2/*2022-01-01*/, "</value>",
                 "        <value>", fetchData.createdon3/*2022-12-31*/, "</value>",
                 "      </condition>",
                 "      <condition attribute='woolcock_contactsource' operator='eq' value='", fetchData.woolcock_contactsource/*2*/, "'/>",

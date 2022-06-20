@@ -55,7 +55,18 @@
     m[p+"contact-condition-count-chart"]={url:H+"/business/records/contact-condition-count-chart/page.html",form_module:'jsonv',prefix:p};
     
     m[p+"contact-count-by-month-2022"]          ={url:H+"/business/records/contact-count-by-month-2022/page.html",form_module:'jsonv',prefix:p};
-    m[p+"contact-count-by-month-2022-chart"]          ={url:H+"/business/records/contact-count-by-month-2022-chart/page.html",form_module:'jsonv',prefix:p};
+    m[p+"contact-count-by-month-2022-chart"]    ={url:H+"/business/records/contact-count-by-month-2022-chart/page.html",form_module:'jsonv',prefix:p};
+    m[p+"contact-count-by-month-2021"]          ={url:H+"/business/records/contact-count-by-month-2021/page.html",form_module:'jsonv',prefix:p};
+    m[p+"contact-count-by-month-2021-chart"]    ={url:H+"/business/records/contact-count-by-month-2021-chart/page.html",form_module:'jsonv',prefix:p};
+    m[p+"contact-count-by-year"]          ={url:H+"/business/records/contact-count-by-year/page.html",form_module:'jsonv',prefix:p};
+    m[p+"contact-count-by-year-chart"]    ={url:H+"/business/records/contact-count-by-year-chart/page.html",form_module:'jsonv',prefix:p};
+
     
+    m[p+"contact-from-portal-count-by-month-2022"]          ={url:H+"/business/records/contact-from-portal-count-by-month-2022/page.html",form_module:'jsonv',prefix:p};
+    m[p+"contact-from-portal-count-by-month-2022-chart"]    ={url:H+"/business/records/contact-from-portal-count-by-month-2022-chart/page.html",form_module:'jsonv',prefix:p};
+    m[p+"contact-from-portal-count-by-month-2021"]          ={url:H+"/business/records/contact-from-portal-count-by-month-2021/page.html",form_module:'jsonv',prefix:p};
+    m[p+"contact-from-portal-count-by-month-2021-chart"]    ={url:H+"/business/records/contact-from-portal-count-by-month-2021-chart/page.html",form_module:'jsonv',prefix:p};
+
+
 })();
 
