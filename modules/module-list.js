@@ -26,6 +26,7 @@
     
     m[p+"can-rest-team"]                                                ={url:H+"/business/contact-team/can-rest/page.html",form_module:'jsonv',prefix:p};
     m[p+"clever-team"]                                                  ={url:H+"/business/contact-team/clever/page.html",form_module:'jsonv',prefix:p};
+    m[p+"cupid-team"]                                                  ={url:H+"/business/contact-team/cupid/page.html",form_module:'jsonv',prefix:p};
     m[p+"effect-team"]                                                  ={url:H+"/business/contact-team/effect/page.html",form_module:'jsonv',prefix:p};
     m[p+"wolf-team"]                                                    ={url:H+"/business/contact-team/wolf/page.html",form_module:'jsonv',prefix:p};
     m[p+"effect-of-3-month"]                                            ={url:H+"/business/contact-team/melatonin-supplementation-in-mild-cognitive-impairment/page.html",form_module:'jsonv',prefix:p};
